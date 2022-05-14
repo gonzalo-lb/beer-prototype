@@ -5,9 +5,9 @@ using UnityEngine;
 public class DebugClass : MonoBehaviour
 {
 
-    public LiquidHolder liquidHolder;
+    public LiquidHolder0_1 liquidHolder;
 
-    public Liquid liquid;
+    public Liquid0_1 liquid;
 
     public float masaDeAzucar;
     public float miliLitrosDeAgua;
@@ -21,8 +21,8 @@ public class DebugClass : MonoBehaviour
 
     private void Awake()
     {
-        liquid = new Liquid();
-        liquidHolder = new LiquidHolder();
+        liquid = new Liquid0_1();
+        liquidHolder = new LiquidHolder0_1();
         liquidHolder._START_SET_METHOD(30000, 0, 0, 0, 0);
     }
 

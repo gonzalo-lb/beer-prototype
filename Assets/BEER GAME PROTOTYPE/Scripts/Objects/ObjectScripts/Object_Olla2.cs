@@ -11,13 +11,13 @@ public class Object_Olla2 : ObjectPickable
     [Tooltip("Ingresar valor en mili litros.")]
     [SerializeField] float capacidadDeLaOlla = 30000f;
     [Tooltip("Cantidad de líquido que hay en la olla, en mili litros.")]
-    [SerializeField] float volumenAlIniciar;
-    [Tooltip("Valor entre 0 y 1. Qué porcentaje del líquido es mosto.")]
-    [SerializeField] float porcentajeDeMosto;
+    [SerializeField] float volumenAlIniciar;    
     [Tooltip("Densidad del líquido con el que inicia la olla.")]
     [SerializeField] float densidadAlIniciar;
     [Tooltip("Temperatura del líquido con el que inicia la olla, en grados centígrados.")]
     [SerializeField] float temperaturaAlIniciar;
+    [Tooltip("Color del líquido inicial.")]
+    [SerializeField] Color colorAlIniciar;
     [Tooltip("Cantidad de segundos que tarda en vaciarse la olla cuando la válvula está abierta.")]
     [SerializeField] float emptyRate = 10f;
 
@@ -38,23 +38,21 @@ public class Object_Olla2 : ObjectPickable
     #region DEBUG VARIABLES
 
     [Header("DEBUG - READ ONLY")]
-    [SerializeField] float __miliLitrosAgua;
-    [SerializeField] float __miliLitrosMosto;
-    [SerializeField] float __temperatura;    
-    [SerializeField] float __masa;    
-    [SerializeField] float __lupulo;
+    [SerializeField] float __volumen;    
+    [SerializeField] float __temperatura;
     [SerializeField] float __densidad;
-    [SerializeField] float __volumen;
-    [SerializeField] float __volumenEnPorcentaje;
-    [SerializeField] float __porcentajeDeMosto01;
+    [SerializeField] float __masaDeAzucar;
+    [SerializeField] float __masaDeAgua;
+    [SerializeField] float __masaDeTotal;
+    [SerializeField] float __lupulo;
+    [SerializeField] float __grano;
+    [SerializeField] float __granoMacerado;
+    
 
     [Header("DEBUG - MOSTO")]
-    [SerializeField] float mostoMLAgua = 400f;
-    [SerializeField] float mostoMLMosto = 100f;
+    [SerializeField] float mostoVolumen = 500f;
     [SerializeField] float mostoTemperatura = 55f;
     [SerializeField] float mostoDensidad = 1010f;
-
-
 
     #endregion
 
@@ -74,15 +72,15 @@ public class Object_Olla2 : ObjectPickable
 
     void DEBUGMETHOD()
     {
-        __miliLitrosAgua = liquidHolder._GetMiliLitrosDeAgua();
-        __miliLitrosMosto = liquidHolder._GetMiliLitrosDeMosto();
-        __temperatura = liquidHolder._GetTemperatura();
-        __masa = liquidHolder._GetMasaDeAzucar();
-        __lupulo = liquidHolder._GetLupulo();
-        __densidad = liquidHolder._GetDensidad();
         __volumen = liquidHolder._GetVolumenDeLiquido();
-        __volumenEnPorcentaje = liquidHolder._GetVolumenEnPorcentaje();
-        __porcentajeDeMosto01 = liquidHolder._GetPorcentajeDeMosto01();
+        __temperatura = liquidHolder._GetTemperatura();
+        __densidad = liquidHolder._GetDensidad();
+        __masaDeAzucar = liquidHolder._GetMasaDeAzucar();
+        __masaDeAgua = liquidHolder._GetMasaDeAgua();
+        __masaDeTotal = liquidHolder._GetMasaTotal();
+        __lupulo = liquidHolder._GetLupulo();
+        __grano = liquidHolder._GetGrano();
+        __granoMacerado = liquidHolder._GetGranoMacerado();
     }
 
     public override void _OnStart()
@@ -95,7 +93,7 @@ public class Object_Olla2 : ObjectPickable
 
         // Setea las variables del liquid holder
         _CheckOnStartValues();
-        liquidHolder._START_SET_METHOD(capacidadDeLaOlla, volumenAlIniciar, porcentajeDeMosto, densidadAlIniciar, temperaturaAlIniciar); // La olla arranca vacía
+        liquidHolder._START_SET_METHOD(capacidadDeLaOlla, volumenAlIniciar, densidadAlIniciar, temperaturaAlIniciar, colorAlIniciar); // La olla arranca vacía        
 
         // Override offset Holding Position & yOffsetOnRelease
         // ...
@@ -171,8 +169,8 @@ public class Object_Olla2 : ObjectPickable
         {
             Debug.Log("Olla abajo del agua");
 
-            // El FillRate del purificador se consiguió en _OnStart()
-            _AgregarLiquido(purificadorLPLiquid._WithVolumeAsDeltaTime());
+            // El FillRate del purificador se consiguió en _OnStart()            
+            _AgregarLiquido(purificadorLPLiquid._WithVolumeAndMasaAsDeltaTime());
         }
 
         if (other.name == TagHelper_COLLIDERS.COCINA_FUEGO_COLLIDER)
@@ -191,12 +189,12 @@ public class Object_Olla2 : ObjectPickable
 
             Liquid mosto = new Liquid();
 
-            mosto._miliLitrosAgua = mostoMLAgua;
-            mosto._miliLitrosMosto = mostoMLMosto;
+            mosto._volumen = __volumen;
+            mosto._masaDeAzucar = __masaDeAzucar;
             mosto._temperatura = mostoTemperatura;
             mosto._densidad = mostoDensidad;
 
-            _AgregarLiquido(mosto._WithVolumeAsDeltaTime());
+            _AgregarLiquido(mosto._WithVolumeAndMasaAsDeltaTime());
         }
     }
 
@@ -264,14 +262,7 @@ public class Object_Olla2 : ObjectPickable
         {
             Debug.LogWarning("El volumen inicial es mayor a la capacidad de la olla. Se setea en el máximo.");
             volumenAlIniciar = capacidadDeLaOlla;
-        }
-
-        // Porcentaje de mosto
-        if(porcentajeDeMosto < 0 || porcentajeDeMosto > 1)
-        {
-            Debug.LogWarning("La variable porcentajeDeMosto tiene que ser un valor entre 0 y 1. Se setea en el valor más cercano.");
-            porcentajeDeMosto = Mathf.Clamp01(porcentajeDeMosto);
-        }        
+        }              
 
         // Densidad
         if(densidadAlIniciar < 0)

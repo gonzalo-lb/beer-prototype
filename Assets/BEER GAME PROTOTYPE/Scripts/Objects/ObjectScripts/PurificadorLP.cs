@@ -21,8 +21,8 @@ public class PurificadorLP : ObjectInteractable_Simple
     {
         fillRate_Liquid = new Liquid();
 
-        if(fillRateML <= 0) { fillRate_Liquid._miliLitrosAgua = 30000f / 20f; } // Equivale a 30 litros cada 20 segundos
-        else { fillRate_Liquid._miliLitrosAgua = fillRateML; }
+        if(fillRateML <= 0) { fillRate_Liquid._volumen = 30000f / 20f; } // Equivale a 30 litros cada 20 segundos
+        else { fillRate_Liquid._volumen = fillRateML; }
 
         if (temperaturaDelAgua <= 0) { fillRate_Liquid._temperatura = 15f; }
         else { fillRate_Liquid._temperatura = temperaturaDelAgua; }

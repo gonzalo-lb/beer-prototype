@@ -2,71 +2,91 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class Liquid
+public class Liquid : MonoBehaviour
 {
-    public float _miliLitrosAgua;    
-    public float _miliLitrosMosto;    
-    public float _temperatura;
+    public float _volumen // En mililitros
+    {
+        get { return _volumen; }
+        set
+        {
+            if(value < 0) { value = 0; }
+            _volumen = value;
+        }
+    }
 
-    [Tooltip("Especificada en gramos.")]
-    public float _masa; // Debería estar en gramos
+    public float _temperatura // En ºC
+    {
+        get { return _temperatura; }
+        set
+        {
+            _temperatura = value;
+            _temperatura = Mathf.Clamp(_temperatura, 0f, 100f);
+        }
+    }
     
-    public float _densidad
+    public float _masaDeAgua // Es pasar el volumen de agua a mili gramos, porque la densidad se mide en miligramos/mililitros
     {
         get
         {
-            return Mathf.Round((_masa * 1000f) / _volumen);
+            return _volumen * 1000f;
+        }
+    }
+
+    public float _masaTotal // En miligramos
+    {
+        get
+        {
+            return _masaDeAgua + _masaDeAzucar;
+        }
+    }
+        
+    public float _masaDeAzucar // En miligramos
+    {
+        get { return _masaDeAzucar; }
+        set
+        {
+            if (value < 0) { value = 0; }
+            _volumen = value;
+        }
+    }
+
+    public float _densidad // En miligramos/mililitros
+    {
+        get
+        {
+            return Mathf.Round(_masaTotal / _volumen);
         }
         set
         {
-            if (value < 900f) { value = 900f; }
-            _masa = (value * _volumen) / 1000f;
-        }
-    }
-    public float _volumen
-    {
-        get
-        {
-            return _miliLitrosAgua + _miliLitrosMosto;
+            if (value < 1000f)
+            {
+                Debug.LogWarning("Se está intentando establecer una densidad por debajo de 1000. Se establece en el mínimo (1000).");
+                value = 1000f;
+            }
+
+            _masaDeAzucar = (value * _volumen) - _masaDeAgua;
         }
     }
 
-    public void _SetVolumenDeLiquido(float volumen, float __porcentajeDeMosto01)
-    {
-        if (volumen <= 0)
-        {
-            _miliLitrosMosto = 0;
-            _miliLitrosAgua = 0;
-            _masa = 0;
-            _temperatura = 0;
-        }
-        else
-        {
-            _miliLitrosMosto = volumen * __porcentajeDeMosto01;
-            _miliLitrosAgua = volumen - _miliLitrosMosto;
-        }
-    }
-
-    public Liquid _WithVolumeAndTemperatureAsDeltaTime()
+    public Color _color;
+    
+    public Liquid _WithVolume_MasaAndTemperatureAsDeltaTime()
     {
         Liquid toReturn = new Liquid();
 
-        toReturn._masa = _masa * Time.deltaTime;
-        toReturn._miliLitrosAgua = _miliLitrosAgua * Time.deltaTime;
-        toReturn._miliLitrosMosto = _miliLitrosMosto * Time.deltaTime;
+        toReturn._volumen = _volumen * Time.deltaTime;
+        toReturn._masaDeAzucar = _masaDeAzucar * Time.deltaTime;        
         toReturn._temperatura = _temperatura * Time.deltaTime;
 
         return toReturn;
     }
 
-    public Liquid _WithVolumeAsDeltaTime()
+    public Liquid _WithVolumeAndMasaAsDeltaTime()
     {
         Liquid toReturn = new Liquid();
 
-        toReturn._masa = _masa * Time.deltaTime;
-        toReturn._miliLitrosAgua = _miliLitrosAgua * Time.deltaTime;
-        toReturn._miliLitrosMosto = _miliLitrosMosto * Time.deltaTime;
+        toReturn._volumen = _volumen * Time.deltaTime;
+        toReturn._masaDeAzucar = _masaDeAzucar * Time.deltaTime;
         toReturn._temperatura = _temperatura;
 
         return toReturn;
@@ -76,9 +96,8 @@ public class Liquid
     {
         Liquid toReturn = new Liquid();
 
-        toReturn._masa = _masa;
-        toReturn._miliLitrosAgua = _miliLitrosAgua;
-        toReturn._miliLitrosMosto = _miliLitrosMosto;
+        toReturn._volumen = _volumen;
+        toReturn._masaDeAzucar = _masaDeAzucar;
         toReturn._temperatura = _temperatura * Time.deltaTime;
 
         return toReturn;
