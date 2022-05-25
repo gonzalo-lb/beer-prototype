@@ -5,14 +5,17 @@ using UnityEngine;
 public class DebugClass : MonoBehaviour
 {
 
-    public LiquidHolder0_1 liquidHolder;
+    public LiquidHolder liquidHolder;
 
-    public Liquid0_1 liquid;
+    public Liquid liquid;
 
-    public float masaDeAzucar;
-    public float miliLitrosDeAgua;
-    public float miliLitrosDeMosto;
+    public float volumen;
     public float temperatura;
+    public float masaDeAgua;
+    public float masaTotal;
+    public float masadeAzucar;
+    public float densidad;
+    public Color color;
 
     public bool SetLiquid;
     public bool LogLiquidValues;
@@ -21,9 +24,14 @@ public class DebugClass : MonoBehaviour
 
     private void Awake()
     {
-        liquid = new Liquid0_1();
-        liquidHolder = new LiquidHolder0_1();
-        liquidHolder._START_SET_METHOD(30000, 0, 0, 0, 0);
+        liquid = new Liquid();
+        liquidHolder = new LiquidHolder();        
+    }
+
+    private IEnumerator Start()
+    {
+        yield return new WaitForSeconds(1f);
+        liquidHolder._START_SET_METHOD(30000, 0, 0, 0, Color.blue);
     }
 
     private void Update()
@@ -31,32 +39,38 @@ public class DebugClass : MonoBehaviour
         if (SetLiquid)
         {
             SetLiquid = false;
-            liquid._masa = masaDeAzucar;
-            liquid._miliLitrosAgua = miliLitrosDeAgua;
-            liquid._miliLitrosMosto = miliLitrosDeMosto;
+            liquid._volumen = volumen;            
             liquid._temperatura = temperatura;
+            //liquid._masaDeAzucar = masadeAzucar;
+            liquid._densidad = densidad;
+            liquid._color = color;
         }
 
         if (LogLiquidValues)
         {
             LogLiquidValues = false;
             Debug.LogWarning("LIQUID VALUES");
-            Debug.Log("liquid._masaDeAzucar = " + liquid._masa);
-            Debug.Log("liquid._miliLitrosAgua = " + liquid._miliLitrosAgua);
-            Debug.Log("liquid._miliLitrosMosto = " + liquid._miliLitrosMosto);
+            Debug.Log("liquid._volumen = " + liquid._volumen);
             Debug.Log("liquid._temperatura = " + liquid._temperatura);
+            Debug.Log("liquid._masaDeAgua = " + liquid._masaDeAgua);
+            Debug.Log("liquid._masaTotal = " + liquid._masaTotal);
+            Debug.Log("liquid._masaDeAzucar = " + liquid._masaDeAzucar);
+            Debug.Log("liquid._densidad = " + liquid._densidad);
+            Debug.Log("liquid._color = " + liquid._color);
         }
 
         if (LogLiquidHolderValues)
         {
             LogLiquidHolderValues = false;
             Debug.LogWarning("LIQUID HOLDER VALUES");
-            Debug.Log("liquidHolder: masaDeAzucar = " + liquidHolder._GetMasaDeAzucar());
-            Debug.Log("liquidHolder: miliLitrosAgua = " + liquidHolder._GetMiliLitrosDeAgua());
-            Debug.Log("liquidHolder: miliLitrosMosto = " + liquidHolder._GetMiliLitrosDeMosto());
+            Debug.Log("liquidHolder: volumen = " + liquidHolder._GetVolumenDeLiquido());
             Debug.Log("liquidHolder: temperatura = " + liquidHolder._GetTemperatura());
-            Debug.Log("liquidHolder: volumen de líquido = " + liquidHolder._GetVolumenDeLiquido());
+            Debug.Log("liquidHolder: masaDeAgua = " + liquidHolder._GetMasaDeAgua());
+            Debug.Log("liquidHolder: masaTotal = " + liquidHolder._GetMasaTotal());
+            Debug.Log("liquidHolder: masaDeAzucar = " + liquidHolder._GetMasaDeAzucar());
             Debug.Log("liquidHolder: densidad = " + liquidHolder._GetDensidad());
+            Debug.Log("liquidHolder: color = " + liquidHolder._GetColor());
+
         }
 
         if (AgregarLiquidoYDebugLog)

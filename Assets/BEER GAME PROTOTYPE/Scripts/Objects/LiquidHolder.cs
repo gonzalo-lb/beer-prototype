@@ -5,7 +5,7 @@ using UnityEngine;
 
 // SIEMPRE HAY QUE INICIAR ESTA CLASS DESDE AFUERA, CON EL METODO _START_SET_METHOD(...)
 
-public class LiquidHolder : MonoBehaviour
+public class LiquidHolder
 {
     #region Valores
 
@@ -33,7 +33,7 @@ public class LiquidHolder : MonoBehaviour
 
     #region Inicialización de la Class
 
-    private void Awake()
+    public LiquidHolder()
     {
         _liquid = new Liquid();        
     }
@@ -42,6 +42,14 @@ public class LiquidHolder : MonoBehaviour
 
     #region Set Metodos
 
+    /// <summary>
+    /// NUNCA USAR EN UN AWAKE()
+    /// </summary>
+    /// <param name="capacidadRecipiente_"></param>
+    /// <param name="volumen_"></param>
+    /// <param name="densidad_"></param>
+    /// <param name="temperatura_"></param>
+    /// <param name="color_"></param>
     public void _START_SET_METHOD(float capacidadRecipiente_, float volumen_, float densidad_, float temperatura_, Color color_)
     {
         // Capacidad del recipiente
@@ -64,18 +72,8 @@ public class LiquidHolder : MonoBehaviour
 
     void _SetVolumenDeLiquido(float volumen, float densidad)
     {
-        if(densidad < 1000f) { densidad = 1000f; }
-
-        if (volumen <= 0)
-        {
-            _liquid._volumen = 0f;
-            _liquid._masaDeAzucar = 0f;
-        }
-        else
-        {
-            _liquid._volumen = volumen;
-            _liquid._densidad = densidad;
-        }
+        _liquid._volumen = volumen;
+        _liquid._densidad = densidad;        
     }   
 
     #endregion
