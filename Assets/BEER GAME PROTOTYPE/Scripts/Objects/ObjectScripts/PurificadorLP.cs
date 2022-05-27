@@ -7,11 +7,13 @@ public class PurificadorLP : ObjectInteractable_Simple
     [SerializeField] AguaCanilla_ParticleSystem particleSystemAguaCanilla;
     [SerializeField] GameObject waterCollider;
 
+    [Header("VALORES DEL LIQUIDO QUE SALE DEL PURIFICADOR")]
     [Tooltip("En ml/sec")]
     [SerializeField] float fillRateML;
 
     [Tooltip("Es la temperatura del agua que sale del purificador, en ºC")]
     [SerializeField] float temperaturaDelAgua = 15f;
+    [SerializeField] Color colorDelAgua;
 
     Liquid fillRate_Liquid;
 
@@ -28,6 +30,8 @@ public class PurificadorLP : ObjectInteractable_Simple
         else { fillRate_Liquid._temperatura = temperaturaDelAgua; }
 
         fillRate_Liquid._densidad = 1000f;
+
+        fillRate_Liquid._color = colorDelAgua;
     }
 
     public override void _OnClick()

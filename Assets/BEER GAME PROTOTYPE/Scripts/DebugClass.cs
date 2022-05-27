@@ -25,14 +25,8 @@ public class DebugClass : MonoBehaviour
     private void Awake()
     {
         liquid = new Liquid();
-        liquidHolder = new LiquidHolder();        
-    }
-
-    private IEnumerator Start()
-    {
-        yield return new WaitForSeconds(1f);
-        liquidHolder._START_SET_METHOD(30000, 0, 0, 0, Color.blue);
-    }
+        liquidHolder = new LiquidHolder(30000, 0, 0, 0, Color.blue);        
+    }    
 
     private void Update()
     {

@@ -44,6 +44,7 @@ public class Object_Olla2 : ObjectPickable
     [SerializeField] float __masaDeAzucar;
     [SerializeField] float __masaDeAgua;
     [SerializeField] float __masaDeTotal;
+    [SerializeField] Color __color;
     [SerializeField] float __lupulo;
     [SerializeField] float __grano;
     [SerializeField] float __granoMacerado;
@@ -62,7 +63,7 @@ public class Object_Olla2 : ObjectPickable
 
     private void Awake()
     {
-        liquidHolder = new LiquidHolder();
+        liquidHolder = new LiquidHolder(capacidadDeLaOlla, volumenAlIniciar, densidadAlIniciar, temperaturaAlIniciar, colorAlIniciar);
     }
 
     private void Update()
@@ -81,6 +82,7 @@ public class Object_Olla2 : ObjectPickable
         __lupulo = liquidHolder._GetLupulo();
         __grano = liquidHolder._GetGrano();
         __granoMacerado = liquidHolder._GetGranoMacerado();
+        __color = liquidHolder._GetColor();
     }
 
     public override void _OnStart()

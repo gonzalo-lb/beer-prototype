@@ -2,15 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-// SIEMPRE HAY QUE INICIAR ESTA CLASS DESDE AFUERA, CON EL METODO _START_SET_METHOD(...)
-
 public class LiquidHolder
 {
     #region Valores
 
     // Valores del recipiente y del líquido
-    Liquid _liquid;
+    Liquid liquidHolder_liquid;
 
     float _capacidadDelRecipiente; // En mililitros
 
@@ -25,7 +22,7 @@ public class LiquidHolder
     {
         get
         {
-            return (_liquid._volumen * 100) / _capacidadDelRecipiente;
+            return (liquidHolder_liquid._volumen * 100) / _capacidadDelRecipiente;
         }
     }
 
@@ -33,23 +30,17 @@ public class LiquidHolder
 
     #region Inicialización de la Class
 
-    public LiquidHolder()
+    public LiquidHolder(float capacidadRecipiente, float volumen, float densidad, float temperatura, Color color)
     {
-        _liquid = new Liquid();        
+        liquidHolder_liquid = new Liquid();
+
+        _START_SET_METHOD(capacidadRecipiente, volumen, densidad, temperatura, color);
     }
 
     #endregion
 
     #region Set Metodos
-
-    /// <summary>
-    /// NUNCA USAR EN UN AWAKE()
-    /// </summary>
-    /// <param name="capacidadRecipiente_"></param>
-    /// <param name="volumen_"></param>
-    /// <param name="densidad_"></param>
-    /// <param name="temperatura_"></param>
-    /// <param name="color_"></param>
+        
     public void _START_SET_METHOD(float capacidadRecipiente_, float volumen_, float densidad_, float temperatura_, Color color_)
     {
         // Capacidad del recipiente
@@ -64,16 +55,16 @@ public class LiquidHolder
         _SetVolumenDeLiquido(volumen_, densidad_);
 
         // Temperatura
-        if (volumen_ <= 0) { _liquid._temperatura = 0; } else { _liquid._temperatura = temperatura_; }
+        if (volumen_ <= 0) { liquidHolder_liquid._temperatura = 0; } else { liquidHolder_liquid._temperatura = temperatura_; }
 
         // Color
-        _liquid._color = color_;
+        liquidHolder_liquid._color = color_;
     }    
 
     void _SetVolumenDeLiquido(float volumen, float densidad)
     {
-        _liquid._volumen = volumen;
-        _liquid._densidad = densidad;        
+        liquidHolder_liquid._volumen = volumen;
+        liquidHolder_liquid._densidad = densidad;        
     }   
 
     #endregion
@@ -82,17 +73,17 @@ public class LiquidHolder
 
     public float _GetCapacidadDelRecipiente() { return _capacidadDelRecipiente; }
 
-    public float _GetTemperatura() { return _liquid._temperatura; }
+    public float _GetTemperatura() { return liquidHolder_liquid._temperatura; }
 
-    public float _GetVolumenDeLiquido() { return _liquid._volumen; }
+    public float _GetVolumenDeLiquido() { return liquidHolder_liquid._volumen; }
 
-    public float _GetMasaDeAzucar() { return _liquid._masaDeAzucar; }
+    public float _GetMasaDeAzucar() { return liquidHolder_liquid._masaDeAzucar; }
 
-    public float _GetMasaDeAgua() { return _liquid._masaDeAgua; }
+    public float _GetMasaDeAgua() { return liquidHolder_liquid._masaDeAgua; }
 
-    public float _GetMasaTotal() { return _liquid._masaTotal; }
+    public float _GetMasaTotal() { return liquidHolder_liquid._masaTotal; }
 
-    public float _GetDensidad() { return _liquid._densidad; }
+    public float _GetDensidad() { return liquidHolder_liquid._densidad; }
 
     public float _GetLupulo() { return _lupulo; }
 
@@ -102,7 +93,7 @@ public class LiquidHolder
 
     public float _GetVolumenEnPorcentaje() { return _volumenEnPorcentaje; }
 
-    public Color _GetColor() { return _liquid._color; }
+    public Color _GetColor() { return liquidHolder_liquid._color; }
 
     #endregion
 
@@ -111,68 +102,76 @@ public class LiquidHolder
     public void _AgregarLiquido(Liquid liquido)
     {
         // Guardamos variables para calcular la nueva temperatura
-        float prevVol = _liquid._volumen;
+        float prevVol = liquidHolder_liquid._volumen;
 
         // Se agrega el volumen y masa de azucar
-        _liquid._volumen += liquido._volumen;
-        _liquid._masaDeAzucar += liquido._masaDeAzucar;        
+        liquidHolder_liquid._volumen += liquido._volumen;
+        liquidHolder_liquid._masaDeAzucar += liquido._masaDeAzucar;        
 
         // Calcular la nueva temperatura del líquido
-        if (prevVol <= 0f) { _liquid._temperatura = liquido._temperatura; } // Si no había agua, la temperatura del líquido es la del que se agrega
+        if (prevVol <= 0f) { liquidHolder_liquid._temperatura = liquido._temperatura; } // Si no había agua, la temperatura del líquido es la del que se agrega
         else // Si ya tenía líquido, se calcula la nueva temperatura
         {
-            float newTemperatura = Library._TemperatureCalcBetween2Liquids(prevVol, _liquid._temperatura, liquido._volumen, liquido._temperatura);
-            _liquid._temperatura = newTemperatura;
+            float newTemperatura = Library._TemperatureCalcBetween2Liquids(prevVol, liquidHolder_liquid._temperatura, liquido._volumen, liquido._temperatura);
+            liquidHolder_liquid._temperatura = newTemperatura;
         }
 
         // Si la cantidad de líquido supera a la del Holder, calcular nuevas cantidades de agua y mosto
-        if (_liquid._volumen > _capacidadDelRecipiente)
+        if (liquidHolder_liquid._volumen > _capacidadDelRecipiente)
         {
-            float excedenteDeVolumen = _liquid._volumen - _capacidadDelRecipiente;
-            float excedenteEnPorcentaje01 = excedenteDeVolumen / _liquid._volumen;
+            float excedenteDeVolumen = liquidHolder_liquid._volumen - _capacidadDelRecipiente;
+            float excedenteEnPorcentaje01 = excedenteDeVolumen / liquidHolder_liquid._volumen;
 
             // Calcula las nuevas cantidad de agua y mosto limitadas a la capacidad del recipiente
-            float volumenARestar = _liquid._volumen * excedenteEnPorcentaje01;
-            _liquid._volumen -= volumenARestar;
+            float volumenARestar = liquidHolder_liquid._volumen * excedenteEnPorcentaje01;
+            liquidHolder_liquid._volumen -= volumenARestar;
 
             // Calcula la nueva densidad
-            float masaDeAzucarARestar = _liquid._masaDeAzucar * excedenteEnPorcentaje01;
-            _liquid._masaDeAzucar -= masaDeAzucarARestar;
+            float masaDeAzucarARestar = liquidHolder_liquid._masaDeAzucar * excedenteEnPorcentaje01;
+            liquidHolder_liquid._masaDeAzucar -= masaDeAzucarARestar;
         }
+
+        // Calcular nuevo color
+        if (prevVol <= 0f) { liquidHolder_liquid._color = liquido._color; } // Si no había agua, el del líquido es la del que se agrega
+        else // Si ya tenía líquido, se calcula el nuevo color
+        {
+            float _t = liquido._volumen / (prevVol + liquido._volumen); // Si esto llega a fallar, cambiar esa linea por esta: liquidHolder_liquid._color / (prevVol + liquido._volumen);
+            liquidHolder_liquid._color = Color.Lerp(liquidHolder_liquid._color, liquido._color, _t);
+        }        
     }
 
     public void _RestarLiquido(float volumenARestar)
     {
-        if (volumenARestar > _liquid._volumen)
+        if (volumenARestar > liquidHolder_liquid._volumen)
         {
-            _liquid._volumen = 0f;
-            _liquid._temperatura = 0f;
-            _liquid._masaDeAzucar = 0f;
-            _liquid._color = Color.clear; // No estoy seguro de que esta linea esté bien
+            liquidHolder_liquid._volumen = 0f;
+            liquidHolder_liquid._temperatura = 0f;
+            liquidHolder_liquid._masaDeAzucar = 0f;
+            liquidHolder_liquid._color = Color.clear; // No estoy seguro de que esta linea esté bien
         }
         else
         {
-            float porcentajeDeVolumenARestar = volumenARestar / _liquid._volumen;
-            _liquid._volumen -= _liquid._volumen * porcentajeDeVolumenARestar;
-            _liquid._masaDeAzucar -= _liquid._masaDeAzucar * porcentajeDeVolumenARestar;
+            float porcentajeDeVolumenARestar = volumenARestar / liquidHolder_liquid._volumen;
+            liquidHolder_liquid._volumen -= liquidHolder_liquid._volumen * porcentajeDeVolumenARestar;
+            liquidHolder_liquid._masaDeAzucar -= liquidHolder_liquid._masaDeAzucar * porcentajeDeVolumenARestar;
         }
     }
 
     public void _AgregarTemperatura(float temperatura)
     {
-        if (_liquid._volumen <= 0) { return; }
+        if (liquidHolder_liquid._volumen <= 0) { return; }
         else
         {
-            _liquid._temperatura += temperatura;            
+            liquidHolder_liquid._temperatura += temperatura;            
         }
     }
 
     public void _RestarTemperatura(float temperatura)
     {
-        if (_liquid._volumen <= 0) { return; }
+        if (liquidHolder_liquid._volumen <= 0) { return; }
         else
         {
-            _liquid._temperatura -= temperatura;            
+            liquidHolder_liquid._temperatura -= temperatura;            
         }
     }
 
