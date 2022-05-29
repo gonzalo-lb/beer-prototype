@@ -21,11 +21,13 @@ public class DebugClass : MonoBehaviour
     public bool LogLiquidValues;
     public bool LogLiquidHolderValues;
     public bool AgregarLiquidoYDebugLog;
+    public bool Macerar;
 
     private void Awake()
     {
         liquid = new Liquid();
-        liquidHolder = new LiquidHolder(30000, 0, 0, 0, Color.blue);        
+        liquidHolder = new LiquidHolder(30000, 0, 0, 0, Color.blue);
+        liquidHolder._AgregarGrano(5000f);
     }    
 
     private void Update()
@@ -34,8 +36,7 @@ public class DebugClass : MonoBehaviour
         {
             SetLiquid = false;
             liquid._volumen = volumen;            
-            liquid._temperatura = temperatura;
-            //liquid._masaDeAzucar = masadeAzucar;
+            liquid._temperatura = temperatura;            
             liquid._densidad = densidad;
             liquid._color = color;
         }
@@ -64,6 +65,8 @@ public class DebugClass : MonoBehaviour
             Debug.Log("liquidHolder: masaDeAzucar = " + liquidHolder._GetMasaDeAzucar());
             Debug.Log("liquidHolder: densidad = " + liquidHolder._GetDensidad());
             Debug.Log("liquidHolder: color = " + liquidHolder._GetColor());
+            Debug.Log("liquidHolder: grano = " + liquidHolder._GetGrano());
+            Debug.Log("liquidHolder: peso del grano = " + liquidHolder._GetPesoDelGrano());
 
         }
 
@@ -72,6 +75,15 @@ public class DebugClass : MonoBehaviour
             AgregarLiquidoYDebugLog = false;
             liquidHolder._AgregarLiquido(liquid);
             LogLiquidHolderValues = true;
+        }
+
+        if (Macerar)
+        {
+            Macerar = false;
+            Debug.LogWarning("MACERADO");
+            Debug.Log("Masa de azucar = " + liquidHolder._GetMasaDeAzucar() + "; Cantidad de grano previo al macerado = " + liquidHolder._GetGrano() + "; Peso total del grano = " + liquidHolder._GetPesoDelGrano() + "; Densidad = " + liquidHolder._GetDensidad() + "; Volumen de líquido = " + liquidHolder._GetVolumenDeLiquido());
+            liquidHolder._Macerar(liquidHolder._GetGrano());
+            Debug.Log("Masa de azucar = " + liquidHolder._GetMasaDeAzucar() + "; Cantidad de grano luego del macerado = " + liquidHolder._GetGrano() + "; Peso total del grano = " + liquidHolder._GetPesoDelGrano() + "; Densidad = " + liquidHolder._GetDensidad() + "; Volumen de líquido = " + liquidHolder._GetVolumenDeLiquido());
         }
     }
 }

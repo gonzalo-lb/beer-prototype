@@ -17,6 +17,13 @@ public class LiquidHolder
     [Tooltip("En gramos.")]
     float _grano;
     float _granoMacerado;
+    float _pesoDelGrano
+    {
+        get
+        {
+            return _grano + _granoMacerado;
+        }
+    }
 
     float _volumenEnPorcentaje
     {
@@ -90,6 +97,8 @@ public class LiquidHolder
     public float _GetGrano() { return _grano; }
 
     public float _GetGranoMacerado() { return _granoMacerado; }
+
+    public float _GetPesoDelGrano() { return _pesoDelGrano; }
 
     public float _GetVolumenEnPorcentaje() { return _volumenEnPorcentaje; }
 
@@ -175,9 +184,46 @@ public class LiquidHolder
         }
     }
 
-    public void _Macerar()
+    public void _AgregarGrano(float grano)
     {
-        // Tiene que convertir el grano en densidad
+        _grano += grano;
+    }
+
+    public void _Macerar(float granoAMacerar)
+    {
+        // Tiene que convertir el grano en azucar
+
+        // Revisa si hay algo de grano o de líquido. Si falta alguno no se puede macerar
+        if(granoAMacerar <= 0) { Debug.LogWarning("_Macerar: RETURN. Grano en 0"); return; }
+        if(liquidHolder_liquid._volumen <= 0) { Debug.LogWarning("_Macerar: RETURN. Líquido en 0"); return; }
+        if(granoAMacerar > _grano)
+        {
+            Debug.LogWarning("void _Macerar(): Se intenta macerar más grano del que hay en el recipiente. Se limita la operación a la cantidad de grano que tiene el macerador.");
+            granoAMacerar = _grano;
+        }
+
+        // Calcula cuánto grano va a poder macerar, en función de la cantidad de líquido que hay
+        // Primer supuesto: Maceración completa. Requiere 10% más de agua que de grano
+        float cantidadNecesariaDeLiquido = granoAMacerar + (granoAMacerar * 0.1f);
+        if(liquidHolder_liquid._volumen >= cantidadNecesariaDeLiquido)
+        {
+            Debug.LogAssertion("Primer supuesto: Maceración completa.");
+            _Macerar_SubMethod_Macerar(granoAMacerar);            
+        }
+        else
+        {
+            Debug.LogAssertion("Segundo supuesto: Maceración parcial.");
+            float cantidadLimitadaDeGranoAMacerar = liquidHolder_liquid._volumen * 0.9f;
+            _Macerar_SubMethod_Macerar(cantidadLimitadaDeGranoAMacerar);
+        }
+    }
+
+    void _Macerar_SubMethod_Macerar(float cantidadDeGrano)
+    {
+        liquidHolder_liquid._volumen -= cantidadDeGrano;
+        _grano -= cantidadDeGrano;
+        _granoMacerado += cantidadDeGrano * 2f;
+        liquidHolder_liquid._masaDeAzucar += cantidadDeGrano * 124f;
     }
 
     #endregion
