@@ -53,7 +53,7 @@ public class Liquid
         }
     }
 
-    public float _densidad // En miligramos/mililitros
+    public float _densidad // En miligramos/mililitros. Los densímetros tienen un máximo de 1160
     {
         get
         {

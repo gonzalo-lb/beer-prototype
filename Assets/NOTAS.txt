@@ -1,0 +1,9 @@
+https://es.onlinemschool.com/math/assistance/cartesian_coordinate/p_to_line/
+
+Hay que calcular una masa de azucar máxima tolerable, como límite a la absorción de azucar por parte del agua (es decir, su solubilidad)
+
+Coordenadas de dos puntos
+A= 20, 2 (a 20º, solubilidad máxima: 2 unidades de azucar, 1 de agua)
+B= 100, 4.9  (a 100º, solubilidad máxima: 4,9 unidades de azucar, 1 de agua)
+
+y = 0.03625x + 1.275

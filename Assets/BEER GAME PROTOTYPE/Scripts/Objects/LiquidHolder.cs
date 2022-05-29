@@ -213,7 +213,7 @@ public class LiquidHolder
         else
         {
             Debug.LogAssertion("Segundo supuesto: Maceración parcial.");
-            float cantidadLimitadaDeGranoAMacerar = liquidHolder_liquid._volumen * 0.9f;
+            float cantidadLimitadaDeGranoAMacerar = liquidHolder_liquid._volumen * 0.4f;
             _Macerar_SubMethod_Macerar(cantidadLimitadaDeGranoAMacerar);
         }
     }
