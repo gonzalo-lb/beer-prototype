@@ -33,6 +33,8 @@ public class LiquidHolder
         }
     }
 
+    float _azucarExcedente;
+
     #endregion
 
     #region Inicialización de la Class
@@ -216,14 +218,55 @@ public class LiquidHolder
             float cantidadLimitadaDeGranoAMacerar = liquidHolder_liquid._volumen * 0.4f;
             _Macerar_SubMethod_Macerar(cantidadLimitadaDeGranoAMacerar);
         }
-    }
 
-    void _Macerar_SubMethod_Macerar(float cantidadDeGrano)
+        void _Macerar_SubMethod_Macerar(float cantidadDeGrano)
+        {
+            liquidHolder_liquid._volumen -= cantidadDeGrano;
+            _grano -= cantidadDeGrano;
+            _granoMacerado += cantidadDeGrano * 2f;
+            liquidHolder_liquid._masaDeAzucar += cantidadDeGrano * 124f;
+        }
+    }
+    
+    /// <summary>
+    /// Calcula la capacidad máxima de soluto del mosto y si hay un excedente de azucar, lo guarda en la variable _azucarExcedente. 
+    /// Si, por el contrario, por la temperatura puede absorver el excedente que haya, lo absorve. 
+    /// Hay que llamar este método cada vez que varía la temperatura del mosto.
+    /// </summary>
+    void OnTemperatureChange(float nuevaTemperatura)
     {
-        liquidHolder_liquid._volumen -= cantidadDeGrano;
-        _grano -= cantidadDeGrano;
-        _granoMacerado += cantidadDeGrano * 2f;
-        liquidHolder_liquid._masaDeAzucar += cantidadDeGrano * 124f;
+        // Calcula la capacidad máxima de soluto
+        float solutoMaximo = (36.25f * nuevaTemperatura) + 1275f;
+
+        // Calcula la masa de azúcar máxima que puede tener la solución
+        float masaDeAzucarMaxima = (solutoMaximo * liquidHolder_liquid._volumen) - liquidHolder_liquid._masaDeAgua;
+
+        // Calcula si hay excedente
+        if (liquidHolder_liquid._masaDeAzucar > masaDeAzucarMaxima)
+            // Si la masa de azucar se excede el soluto máximo, pasa el excedente a _azucarExcedente
+        {
+            float excedente = liquidHolder_liquid._masaDeAzucar - masaDeAzucarMaxima;
+            liquidHolder_liquid._masaDeAzucar = masaDeAzucarMaxima;
+            _azucarExcedente = excedente;
+        }
+        else if (_azucarExcedente > 0f)
+            // Si la masa de azucar no se excede del máximo, y hay excedente para disolver, disuelve hasta el máximo
+        {
+            // Primero calcula cuánto puede absorver
+            float cuantoPuedeAbsorver = masaDeAzucarMaxima - liquidHolder_liquid._masaDeAzucar;
+            if (cuantoPuedeAbsorver >= _azucarExcedente) // Si el azucar excedente puede ser absorvida completa o en parte, pasa a la masa de azucar del mosto
+            {
+                liquidHolder_liquid._masaDeAzucar += _azucarExcedente;
+                _azucarExcedente = 0;
+            }
+            else // Sino, solo absorve lo que puede
+            {
+                // Calcula el excedente
+                float excedente = _azucarExcedente - cuantoPuedeAbsorver;
+                _azucarExcedente = excedente;
+                liquidHolder_liquid._masaDeAzucar = masaDeAzucarMaxima;
+            }
+        }
     }
 
     #endregion

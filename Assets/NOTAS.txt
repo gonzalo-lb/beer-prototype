@@ -1,3 +1,5 @@
+31/05/22
+--------
 https://es.onlinemschool.com/math/assistance/cartesian_coordinate/p_to_line/
 
 Hay que calcular una masa de azucar máxima tolerable, como límite a la absorción de azucar por parte del agua (es decir, su solubilidad)
@@ -7,3 +9,8 @@ A= 20, 2 (a 20º, solubilidad máxima: 2 unidades de azucar, 1 de agua)
 B= 100, 4.9  (a 100º, solubilidad máxima: 4,9 unidades de azucar, 1 de agua)
 
 y = 0.03625x + 1.275
+
+26/06/22
+--------
+ - Empecé función OnTemperatureChange(). Tiene que calcular la capacidad máxima de soluto del mosto y si hay un excedente de azucar, lo tiene que guardar en la variable _azucarExcedente. Si por el contrario, puede absorver el excedente que haya, lo absorve.
+ - Terminé de escribir el código de OnTemperatureChange() pero falta probarlo para ver si hice bien las cuentas.
