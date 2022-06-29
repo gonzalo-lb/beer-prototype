@@ -15,13 +15,17 @@ public class DebugClass : MonoBehaviour
     public float masaTotal;
     public float masadeAzucar;
     public float densidad;
-    public Color color;
+    public Color color;    
 
     public bool SetLiquid;
     public bool LogLiquidValues;
     public bool LogLiquidHolderValues;
     public bool AgregarLiquidoYDebugLog;
     public bool Macerar;
+
+    [Header("OnTemperatureChange()")]
+    public float NuevaTemperatura = 50f;
+    public bool CallOnTemperatureChange;
 
     private void Awake()
     {
@@ -84,6 +88,12 @@ public class DebugClass : MonoBehaviour
             Debug.Log("Masa de azucar = " + liquidHolder._GetMasaDeAzucar() + "; Cantidad de grano previo al macerado = " + liquidHolder._GetGrano() + "; Peso total del grano = " + liquidHolder._GetPesoDelGrano() + "; Densidad = " + liquidHolder._GetDensidad() + "; Volumen de líquido = " + liquidHolder._GetVolumenDeLiquido());
             liquidHolder._Macerar(liquidHolder._GetGrano());
             Debug.Log("Masa de azucar = " + liquidHolder._GetMasaDeAzucar() + "; Cantidad de grano luego del macerado = " + liquidHolder._GetGrano() + "; Peso total del grano = " + liquidHolder._GetPesoDelGrano() + "; Densidad = " + liquidHolder._GetDensidad() + "; Volumen de líquido = " + liquidHolder._GetVolumenDeLiquido());
+        }
+
+        if (CallOnTemperatureChange)
+        {
+            CallOnTemperatureChange = false;
+            liquidHolder._OnTemperatureChange(NuevaTemperatura);
         }
     }
 }

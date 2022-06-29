@@ -233,18 +233,26 @@ public class LiquidHolder
     /// Si, por el contrario, por la temperatura puede absorver el excedente que haya, lo absorve. 
     /// Hay que llamar este método cada vez que varía la temperatura del mosto.
     /// </summary>
-    void OnTemperatureChange(float nuevaTemperatura)
+    public void _OnTemperatureChange(float nuevaTemperatura)
     {
+        Debug.LogWarning("OnTemperatureChange() Called");
+        Debug.Log("Masa de azucar del Liquid Holder = " + liquidHolder_liquid._masaDeAzucar);
+        Debug.Log("Azucar excedente = " + _azucarExcedente);
+
         // Calcula la capacidad máxima de soluto
         float solutoMaximo = (36.25f * nuevaTemperatura) + 1275f;
+        Debug.Log("Capacidad máxima de soluto = " + solutoMaximo);
 
         // Calcula la masa de azúcar máxima que puede tener la solución
         float masaDeAzucarMaxima = (solutoMaximo * liquidHolder_liquid._volumen) - liquidHolder_liquid._masaDeAgua;
+        Debug.Log("Masa de azucar máxima = " + masaDeAzucarMaxima);
 
+        Debug.Log("Masa de azucar en Liquid Holder = " + liquidHolder_liquid._masaDeAzucar);
         // Calcula si hay excedente
         if (liquidHolder_liquid._masaDeAzucar > masaDeAzucarMaxima)
             // Si la masa de azucar se excede el soluto máximo, pasa el excedente a _azucarExcedente
         {
+            Debug.Log("HAY EXCEDENTE DE MASA DE AZUCAR");
             float excedente = liquidHolder_liquid._masaDeAzucar - masaDeAzucarMaxima;
             liquidHolder_liquid._masaDeAzucar = masaDeAzucarMaxima;
             _azucarExcedente = excedente;
@@ -252,22 +260,30 @@ public class LiquidHolder
         else if (_azucarExcedente > 0f)
             // Si la masa de azucar no se excede del máximo, y hay excedente para disolver, disuelve hasta el máximo
         {
+            Debug.Log("NO HAY EXCEDENTE DE MASA DE AZUCAR");
             // Primero calcula cuánto puede absorver
             float cuantoPuedeAbsorver = masaDeAzucarMaxima - liquidHolder_liquid._masaDeAzucar;
+            Debug.Log("Cuánta masa de azucar puede absorver = " + cuantoPuedeAbsorver);
             if (cuantoPuedeAbsorver >= _azucarExcedente) // Si el azucar excedente puede ser absorvida completa o en parte, pasa a la masa de azucar del mosto
             {
+                Debug.Log("ABSORVIENDO TODO EL EXCEDENTE");
                 liquidHolder_liquid._masaDeAzucar += _azucarExcedente;
                 _azucarExcedente = 0;
             }
             else // Sino, solo absorve lo que puede
             {
+                Debug.Log("SE ABSORVIÓ PARTE DEL EXCEDENTE");
                 // Calcula el excedente
                 float excedente = _azucarExcedente - cuantoPuedeAbsorver;
                 _azucarExcedente = excedente;
                 liquidHolder_liquid._masaDeAzucar = masaDeAzucarMaxima;
             }
         }
-    }
+
+        Debug.LogWarning("Finalizado. Los nuevos valores son los siguientes:");
+        Debug.Log("Masa de azucar del Liquid Holder = " + liquidHolder_liquid._masaDeAzucar);
+        Debug.Log("Azucar excedente = " + _azucarExcedente);
+    } // OnTemperatureChange()
 
     #endregion
 }

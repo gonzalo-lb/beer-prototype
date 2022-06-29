@@ -14,3 +14,12 @@ y = 0.03625x + 1.275
 --------
  - Empecé función OnTemperatureChange(). Tiene que calcular la capacidad máxima de soluto del mosto y si hay un excedente de azucar, lo tiene que guardar en la variable _azucarExcedente. Si por el contrario, puede absorver el excedente que haya, lo absorve.
  - Terminé de escribir el código de OnTemperatureChange() pero falta probarlo para ver si hice bien las cuentas.
+
+29/06/22
+--------
+Lo que hice:
+ - Probé la funcionalidad de OnTemperatureChange y parece funcionar correctamente
+Con qué seguir:
+ - Habría que agregarle Clamp a la temperatura que se le puede ingresar como parámetro al método.
+ - Habría que establecer alguna excepción en la funcionalidad para el caso de que no haya líquido en el LiquidHolder, pero que igualmente se llame al método. Puede ser un return y que el excedente quede en la olla. Sería lo más parecido a la realidad.
+ - Hay que llamar al método en los cambios de temperatura (ver si con una delegate o a mano).
