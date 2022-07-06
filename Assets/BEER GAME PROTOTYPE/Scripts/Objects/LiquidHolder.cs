@@ -127,6 +127,9 @@ public class LiquidHolder
             liquidHolder_liquid._temperatura = newTemperatura;
         }
 
+        // Calcula la nueva capacidad máxima de soluto del mosto
+        _OnTemperatureChange(liquidHolder_liquid._temperatura);
+
         // Si la cantidad de líquido supera a la del Holder, calcular nuevas cantidades de agua y mosto
         if (liquidHolder_liquid._volumen > _capacidadDelRecipiente)
         {
@@ -148,7 +151,7 @@ public class LiquidHolder
         {
             float _t = liquido._volumen / (prevVol + liquido._volumen); // Si esto llega a fallar, cambiar esa linea por esta: liquidHolder_liquid._color / (prevVol + liquido._volumen);
             liquidHolder_liquid._color = Color.Lerp(liquidHolder_liquid._color, liquido._color, _t);
-        }        
+        }
     }
 
     public void _RestarLiquido(float volumenARestar)
@@ -173,7 +176,10 @@ public class LiquidHolder
         if (liquidHolder_liquid._volumen <= 0) { return; }
         else
         {
-            liquidHolder_liquid._temperatura += temperatura;            
+            liquidHolder_liquid._temperatura += temperatura;
+
+            // Calcula la nueva capacidad máxima de soluto del mosto
+            _OnTemperatureChange(liquidHolder_liquid._temperatura);
         }
     }
 
@@ -182,7 +188,10 @@ public class LiquidHolder
         if (liquidHolder_liquid._volumen <= 0) { return; }
         else
         {
-            liquidHolder_liquid._temperatura -= temperatura;            
+            liquidHolder_liquid._temperatura -= temperatura;
+
+            // Calcula la nueva capacidad máxima de soluto del mosto
+            _OnTemperatureChange(liquidHolder_liquid._temperatura);
         }
     }
 
@@ -191,10 +200,13 @@ public class LiquidHolder
         _grano += grano;
     }
 
+    /// <summary>
+    /// Convierte el grano en azucar. Durante ese proceso, el grano absorve agua. Este método al macerar disminuye la variable _grano y 
+    /// la pasa a _granoMacerado.
+    /// </summary>
+    /// <param name="granoAMacerar"></param>
     public void _Macerar(float granoAMacerar)
     {
-        // Tiene que convertir el grano en azucar
-
         // Revisa si hay algo de grano o de líquido. Si falta alguno no se puede macerar
         if(granoAMacerar <= 0) { Debug.LogWarning("_Macerar: RETURN. Grano en 0"); return; }
         if(liquidHolder_liquid._volumen <= 0) { Debug.LogWarning("_Macerar: RETURN. Líquido en 0"); return; }
@@ -219,6 +231,9 @@ public class LiquidHolder
             _Macerar_SubMethod_Macerar(cantidadLimitadaDeGranoAMacerar);
         }
 
+        // Calcula la nueva capacidad máxima de soluto del mosto
+        _OnTemperatureChange(liquidHolder_liquid._temperatura);
+
         void _Macerar_SubMethod_Macerar(float cantidadDeGrano)
         {
             liquidHolder_liquid._volumen -= cantidadDeGrano;
@@ -235,6 +250,12 @@ public class LiquidHolder
     /// </summary>
     public void _OnTemperatureChange(float nuevaTemperatura)
     {
+        // Si no hay líquido en el recipiente, no hace nada
+        if (liquidHolder_liquid._volumen <= 0f) { return; }
+
+        // Limita la temperatura del líquido a 0 - 100º
+        nuevaTemperatura = Mathf.Clamp(nuevaTemperatura, 0f, 100f);        
+
         Debug.LogWarning("OnTemperatureChange() Called");
         Debug.Log("Masa de azucar del Liquid Holder = " + liquidHolder_liquid._masaDeAzucar);
         Debug.Log("Azucar excedente = " + _azucarExcedente);
