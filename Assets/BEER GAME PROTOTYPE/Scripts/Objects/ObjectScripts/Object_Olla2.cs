@@ -297,4 +297,36 @@ public class Object_Olla2 : ObjectPickable
     } // _CheckOnStartValues()
 
     #endregion
+
+    #region Get Methods
+
+    public float _GetCapacidadDelRecipiente() { return liquidHolder._GetCapacidadDelRecipiente(); }
+
+    public float _GetTemperatura() { return liquidHolder._GetTemperatura(); }
+
+    public float _GetVolumenDeLiquido() { return liquidHolder._GetVolumenDeLiquido(); }
+
+    public float _GetMasaDeAzucar() { return liquidHolder._GetMasaDeAzucar(); }
+
+    public float _GetMasaDeAgua() { return liquidHolder._GetMasaDeAgua(); }
+
+    public float _GetMasaTotal() { return liquidHolder._GetMasaTotal(); }
+
+    public float _GetDensidad() { return liquidHolder._GetDensidad(); }
+
+    public float _GetAzucarExcedente() { return liquidHolder._GetAzucarExcedente(); }
+
+    public float _GetLupulo() { return liquidHolder._GetLupulo(); }
+
+    public float _GetGrano() { return liquidHolder._GetGrano(); }
+
+    public float _GetGranoMacerado() { return liquidHolder._GetGranoMacerado(); }
+
+    public float _GetPesoDelGrano() { return liquidHolder._GetPesoDelGrano(); }
+
+    public float _GetVolumenEnPorcentaje() { return liquidHolder._GetVolumenEnPorcentaje(); }
+
+    public Color _GetColor() { return liquidHolder._GetColor(); }
+
+    #endregion
 }

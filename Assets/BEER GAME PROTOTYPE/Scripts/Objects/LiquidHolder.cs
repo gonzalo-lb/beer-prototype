@@ -94,6 +94,8 @@ public class LiquidHolder
 
     public float _GetDensidad() { return liquidHolder_liquid._densidad; }
 
+    public float _GetAzucarExcedente() { return _azucarExcedente; }
+
     public float _GetLupulo() { return _lupulo; }
 
     public float _GetGrano() { return _grano; }
@@ -104,7 +106,7 @@ public class LiquidHolder
 
     public float _GetVolumenEnPorcentaje() { return _volumenEnPorcentaje; }
 
-    public Color _GetColor() { return liquidHolder_liquid._color; }
+    public Color _GetColor() { return liquidHolder_liquid._color; }    
 
     #endregion
 
