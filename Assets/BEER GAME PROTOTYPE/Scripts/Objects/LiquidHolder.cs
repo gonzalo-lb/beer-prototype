@@ -60,8 +60,9 @@ public class LiquidHolder
         }
         else { _capacidadDelRecipiente = capacidadRecipiente_; }
 
-        // Volumen inicial de líquido        
-        _SetVolumenDeLiquido(volumen_, densidad_);
+        // Volumen inicial de líquido                
+        _SetVolumen(volumen_);
+        _SetDensidad(densidad_);
 
         // Temperatura
         if (volumen_ <= 0) { liquidHolder_liquid._temperatura = 0; } else { liquidHolder_liquid._temperatura = temperatura_; }
@@ -69,12 +70,22 @@ public class LiquidHolder
         // Color
         liquidHolder_liquid._color = color_;
     }    
+    
+    public void _SetVolumen(float volumen) => liquidHolder_liquid._volumen = volumen;
 
-    void _SetVolumenDeLiquido(float volumen, float densidad)
-    {
-        liquidHolder_liquid._volumen = volumen;
-        liquidHolder_liquid._densidad = densidad;        
-    }   
+    public void _SetTemperatura(float temperatura) => liquidHolder_liquid._temperatura = temperatura;
+
+    public void _SetDensidad(float densidad) => liquidHolder_liquid._densidad = densidad;
+
+    public void _SetMasaDeAzucar(float masadeazucar) => liquidHolder_liquid._masaDeAzucar = masadeazucar;
+
+    public void _SetColor(Color color) => liquidHolder_liquid._color = color;
+
+    public void _SetLupulo(float lupulo) => _lupulo = lupulo;
+
+    public void _SetGrano(float grano) => _grano = grano;
+
+    public void _SetGranoMacerado(float granomacerado) => _granoMacerado = granomacerado;
 
     #endregion
 

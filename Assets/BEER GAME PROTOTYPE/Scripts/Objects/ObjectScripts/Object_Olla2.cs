@@ -21,6 +21,10 @@ public class Object_Olla2 : ObjectPickable
     [Tooltip("Cantidad de segundos que tarda en vaciarse la olla cuando la válvula está abierta.")]
     [SerializeField] float emptyRate = 10f;
 
+    [Header("CARACTERÍSTICAS DE LA OLLA")]
+    [Tooltip("Si es true, entre 60 y 70 grados macera")]
+    [SerializeField] bool macerarEnabled = true;
+
     // Referencias a otros objetos y sus variables
     [Header("REFERENCIAS")]
     [SerializeField] PurificadorLP purificadorLP;
@@ -48,7 +52,18 @@ public class Object_Olla2 : ObjectPickable
     [SerializeField] float __lupulo;
     [SerializeField] float __grano;
     [SerializeField] float __granoMacerado;
-    
+
+    [Header("DEBUG - WRITE")]
+    [SerializeField] float ___volumen; [SerializeField] bool writeVolumen;
+    [SerializeField] float ___temperatura; [SerializeField] bool writeTemperatura;
+    [SerializeField] float ___densidad; [SerializeField] bool writeDensidad;
+    [SerializeField] float ___masaDeAzucar; [SerializeField] bool writeMasaDeAzucar;
+    [SerializeField] Color ___color; [SerializeField] bool writeColor;
+    [SerializeField] float ___lupulo; [SerializeField] bool writeLupulo;
+    [SerializeField] float ___grano; [SerializeField] bool writeGrano;
+    [SerializeField] float ___granoMacerado; [SerializeField] bool writeGranoMacerado;
+    [SerializeField] bool ___WRITE_TODO;
+
 
     [Header("DEBUG - MOSTO")]
     [SerializeField] float mostoVolumen = 500f;
@@ -69,6 +84,7 @@ public class Object_Olla2 : ObjectPickable
     private void Update()
     {
         DEBUGMETHOD();
+        _Macerar(1.3f * Time.deltaTime); // Esa cantidad debería ser 5 kg en 1 hora
     }
 
     void DEBUGMETHOD()
@@ -83,6 +99,28 @@ public class Object_Olla2 : ObjectPickable
         __grano = liquidHolder._GetGrano();
         __granoMacerado = liquidHolder._GetGranoMacerado();
         __color = liquidHolder._GetColor();
+
+        if (___WRITE_TODO)
+        {
+            ___WRITE_TODO = false;
+            liquidHolder._SetVolumen(___volumen);
+            liquidHolder._SetTemperatura(___temperatura);
+            liquidHolder._SetDensidad(___densidad);
+            liquidHolder._SetMasaDeAzucar(___masaDeAzucar);
+            liquidHolder._SetColor(___color);
+            liquidHolder._SetLupulo(___lupulo);
+            liquidHolder._SetGrano(___grano);
+            liquidHolder._SetGranoMacerado(___granoMacerado);            
+        }
+
+        if (writeVolumen) { writeVolumen = false; liquidHolder._SetVolumen(___volumen); }
+        if (writeTemperatura) { writeTemperatura = false; liquidHolder._SetTemperatura(___temperatura); }
+        if (writeDensidad) { writeDensidad = false; liquidHolder._SetDensidad(___densidad); }
+        if (writeMasaDeAzucar) { writeMasaDeAzucar = false; liquidHolder._SetMasaDeAzucar(___masaDeAzucar); }
+        if (writeColor) { writeColor = false; liquidHolder._SetColor(___color); }
+        if (writeLupulo) { writeLupulo = false; liquidHolder._SetLupulo(___lupulo); }
+        if (writeGrano) { writeGrano = false; liquidHolder._SetGrano(___grano); }
+        if (writeGranoMacerado) { writeGranoMacerado = false; liquidHolder._SetGranoMacerado(___granoMacerado); }
     }
 
     public override void _OnStart()
@@ -200,7 +238,7 @@ public class Object_Olla2 : ObjectPickable
         }
     }
 
-    #region Agregar-Quitar Liquido o temperatura y actualizar indicadores o UI
+    #region Agregar-Quitar Liquido o temperatura, macerar y actualizar indicadores o UI
 
     void _AgregarLiquido(Liquid liquid)
     {
@@ -239,6 +277,29 @@ public class Object_Olla2 : ObjectPickable
     void _SetIndicadorDeTemperatura(float _temperatura)
     {
         indicadorDeTemperatura._UpdateText(_temperatura.ToString("F1"));
+    }
+
+    void _AgregarGrano()
+    {
+
+    }
+
+    void _SetGrano()
+    {
+
+    }
+
+    /// <summary>
+    /// Solo hace algo si la temperatura del líquido está entre 60 y 70 grados
+    /// </summary>
+    /// <param name="cantidadDeGranoAMacerar"></param>
+    void _Macerar(float cantidadDeGranoAMacerar)
+    {
+        if (!macerarEnabled) { return; }
+        if(liquidHolder._GetTemperatura() > 60f && liquidHolder._GetTemperatura() < 70f)
+        {
+            liquidHolder._Macerar(cantidadDeGranoAMacerar);
+        }
     }
 
     #endregion

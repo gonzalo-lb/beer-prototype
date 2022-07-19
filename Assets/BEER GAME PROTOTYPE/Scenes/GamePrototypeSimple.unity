@@ -447,6 +447,7 @@ GameObject:
   m_Component:
   - component: {fileID: 170077894}
   - component: {fileID: 170077893}
+  - component: {fileID: 170077895}
   m_Layer: 0
   m_Name: DEBUG_OBJECT
   m_TagString: Untagged
@@ -494,6 +495,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &170077895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170077892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c934aaa70738d034cb768eca4a31fdb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &176329719
 GameObject:
   m_ObjectHideFlags: 0
@@ -1585,11 +1598,12 @@ MonoBehaviour:
   offsetRotationHolding: {x: 0, y: 0, z: 0}
   thisGameObjectChildren: []
   capacidadDeLaOlla: 30000
-  volumenAlIniciar: 12000
-  densidadAlIniciar: 1060
+  volumenAlIniciar: 15000
+  densidadAlIniciar: 1000
   temperaturaAlIniciar: 66
   colorAlIniciar: {r: 0, g: 0.052033424, b: 1, a: 0}
   emptyRate: 10
+  macerarEnabled: 1
   purificadorLP: {fileID: 1387542468}
   indicadorDeTemperatura: {fileID: 58989226}
   animator: {fileID: 312003913}
@@ -1603,6 +1617,23 @@ MonoBehaviour:
   __lupulo: 0
   __grano: 0
   __granoMacerado: 0
+  ___volumen: 0
+  writeVolumen: 0
+  ___temperatura: 0
+  writeTemperatura: 0
+  ___densidad: 0
+  writeDensidad: 0
+  ___masaDeAzucar: 0
+  writeMasaDeAzucar: 0
+  ___color: {r: 0, g: 0, b: 0, a: 0}
+  writeColor: 0
+  ___lupulo: 0
+  writeLupulo: 0
+  ___grano: 0
+  writeGrano: 0
+  ___granoMacerado: 0
+  writeGranoMacerado: 0
+  ___WRITE_TODO: 0
   mostoVolumen: 500
   mostoTemperatura: 55
   mostoDensidad: 1010
