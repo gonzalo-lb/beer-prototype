@@ -223,6 +223,8 @@ public class LiquidHolder
         // Revisa si hay algo de grano o de líquido. Si falta alguno no se puede macerar
         if(granoAMacerar <= 0) { Debug.LogWarning("_Macerar: RETURN. Grano en 0"); return; }
         if(liquidHolder_liquid._volumen <= 0) { Debug.LogWarning("_Macerar: RETURN. Líquido en 0"); return; }
+        
+        // Se fija que la cantidad de grano a macerar exista
         if(granoAMacerar > _grano)
         {
             Debug.LogWarning("void _Macerar(): Se intenta macerar más grano del que hay en el recipiente. Se limita la operación a la cantidad de grano que tiene el macerador.");
@@ -249,10 +251,17 @@ public class LiquidHolder
 
         void _Macerar_SubMethod_Macerar(float cantidadDeGrano)
         {
+            // Macera
             liquidHolder_liquid._volumen -= cantidadDeGrano;
             _grano -= cantidadDeGrano;
             _granoMacerado += cantidadDeGrano * 2f;
             liquidHolder_liquid._masaDeAzucar += cantidadDeGrano * 124f;
+
+            // Calcula el nuevo color del mosto
+            float granoMaceradoSinAgua = _granoMacerado / 2f;
+            float granoTotal = _grano + granoMaceradoSinAgua;
+            float t = granoMaceradoSinAgua / granoTotal;
+            liquidHolder_liquid._color = Color.Lerp(liquidHolder_liquid._colorDelAgua, liquidHolder_liquid._colorDelMosto, t);            
         }
     }
     

@@ -72,7 +72,21 @@ public class Liquid
     }
 
     public Color _color;
-    
+    public Color _colorDelAgua
+    {
+        get
+        {
+            return new Color(0, 13, 255, 150);
+        }
+    }    
+    public Color _colorDelMosto
+    {
+        get
+        {
+            return new Color(111, 79, 0, 255);
+        }
+    }
+
     public Liquid _WithVolume_MasaAndTemperatureAsDeltaTime()
     {
         Liquid toReturn = new Liquid();

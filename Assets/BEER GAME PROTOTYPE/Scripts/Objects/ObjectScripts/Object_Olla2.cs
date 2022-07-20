@@ -21,9 +21,12 @@ public class Object_Olla2 : ObjectPickable
     [Tooltip("Cantidad de segundos que tarda en vaciarse la olla cuando la válvula está abierta.")]
     [SerializeField] float emptyRate = 10f;
 
+    // Características de la olla
     [Header("CARACTERÍSTICAS DE LA OLLA")]
     [Tooltip("Si es true, entre 60 y 70 grados macera")]
     [SerializeField] bool macerarEnabled = true;
+    [Tooltip("Expreado en minutos. Es lo que tarda la olla en macerar el grano que contenga en ese momento.")]
+    [SerializeField] float tiempoMaceradoTotal = 1f;
 
     // Referencias a otros objetos y sus variables
     [Header("REFERENCIAS")]
@@ -76,6 +79,8 @@ public class Object_Olla2 : ObjectPickable
 
     // Lo que sea que en un futuro controle al mesh del indicador de temperatura
 
+    #region Metodos base
+
     private void Awake()
     {
         liquidHolder = new LiquidHolder(capacidadDeLaOlla, volumenAlIniciar, densidadAlIniciar, temperaturaAlIniciar, colorAlIniciar);
@@ -84,7 +89,7 @@ public class Object_Olla2 : ObjectPickable
     private void Update()
     {
         DEBUGMETHOD();
-        _Macerar(1.3f * Time.deltaTime); // Esa cantidad debería ser 5 kg en 1 hora
+        _Macerar(tiempoMaceradoTotal);
     }
 
     void DEBUGMETHOD()
@@ -238,7 +243,64 @@ public class Object_Olla2 : ObjectPickable
         }
     }
 
-    #region Agregar-Quitar Liquido o temperatura, macerar y actualizar indicadores o UI
+    #endregion
+
+    #region Metodos base (Sub-Metodos)
+
+    void _CheckOnStartValues()
+    {
+        // Capacidad de la olla
+        if (capacidadDeLaOlla <= 0)
+        {
+            Debug.LogWarning("Como la variable 'capacidadDeLaOlla contiene un valor menor o igual a 0, se setea en 30 litros'");
+            capacidadDeLaOlla = 30000f;
+        }
+
+        // Volumen inicial
+        if (volumenAlIniciar < 0)
+        {
+            Debug.LogWarning("Como la variable 'volumenInicial contiene un valor menor a 0, se setea en 0 litros'");
+            volumenAlIniciar = 0;
+        }
+        else if (volumenAlIniciar > capacidadDeLaOlla)
+        {
+            Debug.LogWarning("El volumen inicial es mayor a la capacidad de la olla. Se setea en el máximo.");
+            volumenAlIniciar = capacidadDeLaOlla;
+        }
+
+        // Densidad
+        if (densidadAlIniciar < 0)
+        {
+            Debug.LogWarning("La variable densidad no puede ser inferior a 0. Se setea en 0.");
+            densidadAlIniciar = 0;
+        }
+
+        // Temperatura
+        if (temperaturaAlIniciar < 0)
+        {
+            Debug.LogWarning("La variable temperatura no puede ser inferior a 0. Se setea en 0.");
+            temperaturaAlIniciar = 0;
+        }
+        else if (temperaturaAlIniciar > 100f)
+        {
+            Debug.LogWarning("La variable temperatura no puede ser mayor a 100. Se setea en 100.");
+            temperaturaAlIniciar = 100f;
+        }
+
+        // Empty Rate
+        if (emptyRate <= 0)
+        {
+            Debug.LogWarning("El EmptyRate no puede ser menor o igual a 0. Se setea en 10 segundos.");
+            emptyRate = 10f;
+        }
+
+        emptyRate = capacidadDeLaOlla / emptyRate;
+
+    } // _CheckOnStartValues()
+
+    #endregion
+
+    #region Funcionalidad --> Agregar-Quitar Liquido o temperatura, macerar y actualizar indicadores o UI
 
     void _AgregarLiquido(Liquid liquid)
     {
@@ -292,70 +354,19 @@ public class Object_Olla2 : ObjectPickable
     /// <summary>
     /// Solo hace algo si la temperatura del líquido está entre 60 y 70 grados
     /// </summary>
-    /// <param name="cantidadDeGranoAMacerar"></param>
-    void _Macerar(float cantidadDeGranoAMacerar)
+    /// <param name="tiempo">Cantidad de tiempo que tarda en macerarse todo el grano, expresado en minutos. Debería ingresarse como parámetro la variable tiempoMAceradoTotal.</param>
+    void _Macerar(float tiempo)
     {
         if (!macerarEnabled) { return; }
         if(liquidHolder._GetTemperatura() > 60f && liquidHolder._GetTemperatura() < 70f)
         {
-            liquidHolder._Macerar(cantidadDeGranoAMacerar);
+            float tiempoMaceradoTotalenSegundos = tiempo * 60f;
+            float granoTotal = _GetGrano() + (_GetGranoMacerado()/2f); // El grano macerado pesa el doble, por eso hay que dividirlo
+            float granoAMacerar = (granoTotal / tiempoMaceradoTotalenSegundos) * Time.deltaTime;
+            granoAMacerar = Mathf.Clamp(granoAMacerar, 0f, granoTotal);
+            liquidHolder._Macerar(granoAMacerar);
         }
     }
-
-    #endregion
-
-    #region Sub-Metodos
-
-    void _CheckOnStartValues()
-    {
-        // Capacidad de la olla
-        if (capacidadDeLaOlla <= 0)
-        {
-            Debug.LogWarning("Como la variable 'capacidadDeLaOlla contiene un valor menor o igual a 0, se setea en 30 litros'");
-            capacidadDeLaOlla = 30000f;
-        }
-
-        // Volumen inicial
-        if(volumenAlIniciar < 0)
-        {
-            Debug.LogWarning("Como la variable 'volumenInicial contiene un valor menor a 0, se setea en 0 litros'");
-            volumenAlIniciar = 0;
-        }
-        else if(volumenAlIniciar > capacidadDeLaOlla)
-        {
-            Debug.LogWarning("El volumen inicial es mayor a la capacidad de la olla. Se setea en el máximo.");
-            volumenAlIniciar = capacidadDeLaOlla;
-        }              
-
-        // Densidad
-        if(densidadAlIniciar < 0)
-        {
-            Debug.LogWarning("La variable densidad no puede ser inferior a 0. Se setea en 0.");
-            densidadAlIniciar = 0;
-        }
-
-        // Temperatura
-        if(temperaturaAlIniciar < 0)
-        {
-            Debug.LogWarning("La variable temperatura no puede ser inferior a 0. Se setea en 0.");
-            temperaturaAlIniciar = 0;
-        }
-        else if (temperaturaAlIniciar > 100f)
-        {
-            Debug.LogWarning("La variable temperatura no puede ser mayor a 100. Se setea en 100.");
-            temperaturaAlIniciar = 100f;
-        }
-
-        // Empty Rate
-        if(emptyRate <= 0)
-        {
-            Debug.LogWarning("El EmptyRate no puede ser menor o igual a 0. Se setea en 10 segundos.");
-            emptyRate = 10f;
-        }
-
-        emptyRate = capacidadDeLaOlla / emptyRate;       
-
-    } // _CheckOnStartValues()
 
     #endregion
 

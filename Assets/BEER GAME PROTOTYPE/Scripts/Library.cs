@@ -179,5 +179,5 @@ public class Library : MonoBehaviour
     public static float _TemperatureCalcBetween2Liquids(float M1, float T1, float M2, float T2)
     {
         return -(-(M1*T1)-(M2*T2))/(M1 + M2);
-    }
+    }    
 }
