@@ -71,6 +71,23 @@ public class Liquid
         }
     }
 
+    public float _etanol;
+    public float _graduacionAlcoholica
+    {
+        get
+        {
+            return (_etanol * 100f) / _volumen;
+        }
+    }
+
+    public float _IBU;
+
+    public float _residuos; // Esto determina la turbidez del líquido
+
+    public float _volumenesDeCO2;
+
+    public float _proteina; // Se la tiene que sumar la maceración, y con la cocción tiene que ir disminuyendo
+
     public Color _color;
     public Color _colorDelAgua
     {

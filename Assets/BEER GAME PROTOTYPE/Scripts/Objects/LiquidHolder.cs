@@ -13,6 +13,14 @@ public class LiquidHolder
 
     [Tooltip("En gramos.")]
     float _lupulo;
+    float _lupuloUsado;
+    float _pesoDelLupulo
+    {
+        get
+        {
+            return _lupulo + _lupuloUsado;
+        }
+    }
 
     [Tooltip("En gramos.")]
     float _grano;
@@ -22,6 +30,17 @@ public class LiquidHolder
         get
         {
             return _grano + _granoMacerado;
+        }
+    }
+
+    [Tooltip("En gramos.")]
+    float _levadura;
+    float _levaduraUsada;
+    float _pesoDeLaLevadura
+    {
+        get
+        {
+            return _levadura + _levaduraUsada;
         }
     }
 
@@ -215,7 +234,8 @@ public class LiquidHolder
 
     /// <summary>
     /// Convierte el grano en azucar. Durante ese proceso, el grano absorve agua. Este método al macerar disminuye la variable _grano y 
-    /// la pasa a _granoMacerado.
+    /// la pasa a _granoMacerado. También la maceración agrega residuos (que hacen turbio al líquido) y proteína (que luego la cocción va 
+    /// a separar, y se saca con una espumadera)
     /// </summary>
     /// <param name="granoAMacerar"></param>
     public void _Macerar(float granoAMacerar)
@@ -256,6 +276,8 @@ public class LiquidHolder
             _grano -= cantidadDeGrano;
             _granoMacerado += cantidadDeGrano * 2f;
             liquidHolder_liquid._masaDeAzucar += cantidadDeGrano * 124f;
+            liquidHolder_liquid._residuos += (cantidadDeGrano * 0.02f); // Para ver cómo llegué al 0.02, ver en el cuaderno de tapa dura, p. 1 vta --> "Turbidez del mosto al macerar"
+            liquidHolder_liquid._proteina += cantidadDeGrano; // Por ahora agrega tanta proteina como grano, hasta ver si tiene sentido esa unidad, u otra
 
             // Calcula el nuevo color del mosto
             float granoMaceradoSinAgua = _granoMacerado / 2f;
