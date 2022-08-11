@@ -55,6 +55,12 @@ public class Object_Olla2 : ObjectPickable
     [SerializeField] float __lupulo;
     [SerializeField] float __grano;
     [SerializeField] float __granoMacerado;
+    [SerializeField] float __etanol;
+    [SerializeField] float __graduacionAlcoholica;
+    [SerializeField] float __IBU;
+    [SerializeField] float __residuos;
+    [SerializeField] float __volumenesDeCO2;
+    [SerializeField] float __proteina;
 
     [Header("DEBUG - WRITE")]
     [SerializeField] float ___volumen; [SerializeField] bool writeVolumen;
@@ -65,6 +71,11 @@ public class Object_Olla2 : ObjectPickable
     [SerializeField] float ___lupulo; [SerializeField] bool writeLupulo;
     [SerializeField] float ___grano; [SerializeField] bool writeGrano;
     [SerializeField] float ___granoMacerado; [SerializeField] bool writeGranoMacerado;
+    [SerializeField] float ___etanol;[SerializeField] bool writeEtanol;
+    [SerializeField] float ___IBU;[SerializeField] bool writeIBU;
+    [SerializeField] float ___residuos;[SerializeField] bool writeResiduos;
+    [SerializeField] float ___volumenesDeCO2;[SerializeField] bool writeVolumenesDeCO2;
+    [SerializeField] float ___proteina;[SerializeField] bool writeProteina;
     [SerializeField] bool ___WRITE_TODO;
 
 
@@ -100,11 +111,17 @@ public class Object_Olla2 : ObjectPickable
         __masaDeAzucar = liquidHolder._GetMasaDeAzucar();
         __masaDeAgua = liquidHolder._GetMasaDeAgua();
         __masaDeTotal = liquidHolder._GetMasaTotal();
+        __color = liquidHolder._GetColor();
         __lupulo = liquidHolder._GetLupulo();
         __grano = liquidHolder._GetGrano();
         __granoMacerado = liquidHolder._GetGranoMacerado();
-        __color = liquidHolder._GetColor();
-
+        __etanol = liquidHolder._GetEtanol();
+        __graduacionAlcoholica = liquidHolder._GetGraduacionAlcoholica();
+        __IBU = liquidHolder._GetIBU();
+        __residuos = liquidHolder._GetResiduos();
+        __volumenesDeCO2 = liquidHolder._GetVolumenesDeCO2();
+        __proteina = liquidHolder._GetProteina();
+        
         if (___WRITE_TODO)
         {
             ___WRITE_TODO = false;
@@ -115,7 +132,12 @@ public class Object_Olla2 : ObjectPickable
             liquidHolder._SetColor(___color);
             liquidHolder._SetLupulo(___lupulo);
             liquidHolder._SetGrano(___grano);
-            liquidHolder._SetGranoMacerado(___granoMacerado);            
+            liquidHolder._SetGranoMacerado(___granoMacerado);
+            liquidHolder._SetEtanol(___etanol);            
+            liquidHolder._SetIBU(___IBU);
+            liquidHolder._SetResiduos(___residuos);
+            liquidHolder._SetVolumenesDeCO2(___volumenesDeCO2);
+            liquidHolder._SetProteina(___proteina);
         }
 
         if (writeVolumen) { writeVolumen = false; liquidHolder._SetVolumen(___volumen); }
@@ -126,6 +148,11 @@ public class Object_Olla2 : ObjectPickable
         if (writeLupulo) { writeLupulo = false; liquidHolder._SetLupulo(___lupulo); }
         if (writeGrano) { writeGrano = false; liquidHolder._SetGrano(___grano); }
         if (writeGranoMacerado) { writeGranoMacerado = false; liquidHolder._SetGranoMacerado(___granoMacerado); }
+        if (writeEtanol) { writeEtanol = false; liquidHolder._SetEtanol(___etanol); }
+        if (writeIBU) { writeIBU = false; liquidHolder._SetIBU(___IBU); }
+        if (writeResiduos) { writeResiduos = false; liquidHolder._SetResiduos(___residuos); }
+        if (writeVolumenesDeCO2) { writeVolumenesDeCO2 = false; liquidHolder._SetVolumenesDeCO2(___volumenesDeCO2); }
+        if (writeProteina) { writeProteina = false; liquidHolder._SetProteina(___proteina); }        
     }
 
     public override void _OnStart()

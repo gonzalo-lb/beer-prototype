@@ -106,6 +106,16 @@ public class LiquidHolder
 
     public void _SetGranoMacerado(float granomacerado) => _granoMacerado = granomacerado;
 
+    public void _SetEtanol(float etanol) => liquidHolder_liquid._etanol = etanol;
+
+    public void _SetIBU(float IBU) => liquidHolder_liquid._IBU = IBU;
+
+    public void _SetResiduos(float residuos) => liquidHolder_liquid._residuos = residuos;
+
+    public void _SetVolumenesDeCO2(float volumenesDeCO2) => liquidHolder_liquid._volumenesDeCO2 = volumenesDeCO2;
+
+    public void _SetProteina(float proteina) => liquidHolder_liquid._proteina = proteina;
+
     #endregion
 
     #region Get Methods
@@ -136,7 +146,19 @@ public class LiquidHolder
 
     public float _GetVolumenEnPorcentaje() { return _volumenEnPorcentaje; }
 
-    public Color _GetColor() { return liquidHolder_liquid._color; }    
+    public Color _GetColor() { return liquidHolder_liquid._color; }
+
+    public float _GetEtanol() { return liquidHolder_liquid._etanol; }
+
+    public float _GetGraduacionAlcoholica() { return liquidHolder_liquid._graduacionAlcoholica; }
+
+    public float _GetIBU() { return liquidHolder_liquid._IBU; }
+
+    public float _GetResiduos() { return liquidHolder_liquid._residuos; }
+
+    public float _GetVolumenesDeCO2() { return liquidHolder_liquid._volumenesDeCO2; }
+
+    public float _GetProteina() { return liquidHolder_liquid._proteina; }
 
     #endregion
 
@@ -230,6 +252,19 @@ public class LiquidHolder
     public void _AgregarGrano(float grano)
     {
         _grano += grano;
+    }
+
+    public void _RestarGrano(float grano)
+    {
+        if(_pesoDelGrano <= 0) { return; }
+        float porcentajeDeGrano = _grano / _pesoDelGrano;
+        float porcentajeDeGranoMacerado = 1f - porcentajeDeGrano;
+        float granoARestar = grano * porcentajeDeGrano;
+        float granoMaceradoARestar = grano * porcentajeDeGranoMacerado;
+        _grano -= granoARestar;
+        _granoMacerado -= granoMaceradoARestar;
+        if(_grano < 0) { _grano = 0; }
+        if(_granoMacerado < 0) { _granoMacerado = 0; }
     }
 
     /// <summary>

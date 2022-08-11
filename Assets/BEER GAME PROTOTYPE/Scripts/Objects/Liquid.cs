@@ -86,7 +86,7 @@ public class Liquid
 
     public float _volumenesDeCO2;
 
-    public float _proteina; // Se la tiene que sumar la maceración, y con la cocción tiene que ir disminuyendo
+    public float _proteina; // Se la tiene que sumar la maceración, y con la cocción tiene que ir disminuyendo. Aporta sabores no deseados
 
     public Color _color;
     public Color _colorDelAgua
